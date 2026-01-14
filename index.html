@@ -1,1 +1,380 @@
-<h1>這是我的個人作品集首頁</h1>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>我的作品集</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <style>
+      :root {
+        --bg: #0f1724;
+        --card: #0b1220;
+        --accent: #06b6d4;
+        --muted: #94a3b8;
+        --text: #e6eef6;
+      }
+      html,
+      body,
+      #root {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto,
+          "Noto Sans TC", "Helvetica Neue", Arial;
+        background: linear-gradient(180deg, #071029 0%, #071b2d 60%);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 32px auto;
+        padding: 16px;
+      }
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #0ea5a6, #7dd3fc);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #06202a;
+        font-weight: 700;
+        font-size: 22px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.6rem;
+      }
+      p.lead {
+        margin: 0;
+        color: var(--muted);
+      }
+      .projects {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-top: 18px;
+      }
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(0, 0, 0, 0.04)
+        );
+        padding: 12px;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+        display: flex;
+        flex-direction: column;
+      }
+      .thumb {
+        width: 100%;
+        height: 140px;
+        border-radius: 8px;
+        background-size: cover;
+        background-position: center;
+        margin-bottom: 10px;
+      }
+      .proj-title {
+        font-weight: 600;
+        color: var(--text);
+        margin: 0 0 6px 0;
+      }
+      .proj-desc {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      a.link {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .back {
+        display: inline-block;
+        margin: 8px 0;
+        color: var(--muted);
+      }
+      /* Detail layout */
+      .detail {
+        background: linear-gradient(180deg, #051026, #061428);
+        padding: 18px;
+        border-radius: 10px;
+      }
+      .section {
+        margin-bottom: 14px;
+      }
+      .section h3 {
+        margin: 0 0 8px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        text-align: left;
+      }
+      /* Responsive tweaks */
+      @media (max-width: 560px) {
+        .avatar {
+          width: 56px;
+          height: 56px;
+          font-size: 18px;
+        }
+        .thumb {
+          height: 120px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React + ReactDOM + Babel (for small static demo) -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      const projects = [
+        {
+          id: "proj-1",
+          title: "智慧行程規劃器",
+          desc: "使用者可建立多天行程，自動調整交通與行程順序以最佳化時間。",
+          image:
+            "https://via.placeholder.com/800x500.png?text=%E8%A1%8C%E7%A8%8B%E8%A6%8F%E5%8A%83",
+          goal: "提供一個簡單的 UI，幫助使用者快速建立並匯出行程表。",
+          requirements: [
+            "多天行程建立",
+            "地點搜尋",
+            "自動最佳化排序",
+            "行程匯出 PDF",
+          ],
+          architecture:
+            "前端 React SPA，後端 Node.js + Express，外掛地理位置 API 與路徑優化服務。",
+          dbOutline: "使用 NoSQL 儲存使用者、行程文件；分區鍵為 `userId`。",
+          apiSpec: [
+            {
+              method: "GET",
+              path: "/api/projects",
+              desc: "取得使用者的所有專案",
+            },
+            { method: "POST", path: "/api/projects", desc: "建立新專案" },
+            { method: "GET", path: "/api/projects/:id", desc: "讀取專案細節" },
+          ],
+        },
+        {
+          id: "proj-2",
+          title: "即時聊天室分析平台",
+          desc: "串接 WebSocket，並對訊息進行情緒分析與標記。",
+          image:
+            "https://via.placeholder.com/800x500.png?text=%E8%81%8A%E5%A4%A9%E5%8F%B0",
+          goal: "提供實時分析儀表板，呈現情緒趨勢與關鍵字雲。",
+          requirements: [
+            "WebSocket 即時連線",
+            "情緒分析模型",
+            "訊息儲存與搜尋",
+          ],
+          architecture:
+            "前端 React，後端 Node.js + Socket.IO，分析服務用 Python 微服務。",
+          dbOutline:
+            "時間序列資料存於專用 DB，聊天內容存於 Cosmos/Document DB。",
+          apiSpec: [
+            { method: "WS", path: "/ws", desc: "即時訊息通道" },
+            { method: "GET", path: "/api/messages", desc: "查詢歷史訊息" },
+          ],
+        },
+        {
+          id: "proj-3",
+          title: "個人財務儀表板",
+          desc: "整合銀行交易匯入、自動分類與月度報表。",
+          image:
+            "https://via.placeholder.com/800x500.png?text=%E8%B2%A1%E5%8B%99%E5%84%80%E8%A1%A8",
+          goal: "讓使用者快速了解收支並做預算規劃。",
+          requirements: ["交易匯入", "自動分類", "報表/圖表展示", "多幣別支援"],
+          architecture: "前端 React + charting lib，後端處理匯入與分類邏輯。",
+          dbOutline: "交易表、使用者表、分類字典。",
+          apiSpec: [
+            { method: "POST", path: "/api/import", desc: "上傳交易 CSV" },
+            {
+              method: "GET",
+              path: "/api/reports/monthly",
+              desc: "取得月度報表",
+            },
+          ],
+        },
+      ];
+
+      function Header() {
+        return (
+          <header>
+            <div className="title">
+              <div className="avatar">JA</div>
+              <div>
+                <h1>我是 Johnny — 前端工程師 / UI 設計</h1>
+                <p className="lead">
+                  專注於
+                  RWD、互動式介面與性能優化。以下為我的部分作品，點選專案可查看詳細說明。
+                </p>
+              </div>
+            </div>
+          </header>
+        );
+      }
+
+      function ProjectCard({ p, onOpen }) {
+        return (
+          <div className="card">
+            <div
+              className="thumb"
+              style={{ backgroundImage: `url(${p.image})` }}
+              onClick={() => onOpen(p.id)}
+              role="button"
+              aria-label={p.title}
+            ></div>
+            <h4 className="proj-title">
+              <a className="link" href={`#/project/${p.id}`}>
+                {p.title}
+              </a>
+            </h4>
+            <p className="proj-desc">{p.desc}</p>
+          </div>
+        );
+      }
+
+      function Projects({ onOpen }) {
+        return (
+          <section>
+            <div className="projects">
+              {projects.map((p) => (
+                <ProjectCard key={p.id} p={p} onOpen={onOpen} />
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      function ProjectDetail({ id }) {
+        const p = projects.find((x) => x.id === id);
+        if (!p) {
+          return (
+            <div>
+              找不到專案。{" "}
+              <a className="link" href="#/">
+                回到首頁
+              </a>
+            </div>
+          );
+        }
+        return (
+          <div className="detail">
+            <a className="back" href="#/">
+              ← 返回作品列表
+            </a>
+            <h2 style={{ marginTop: 6 }}>{p.title}</h2>
+            <p style={{ color: "var(--muted)" }}>{p.desc}</p>
+
+            <div className="section">
+              <h3>1. 專案目標</h3>
+              <p>{p.goal}</p>
+            </div>
+
+            <div className="section">
+              <h3>2. 需求</h3>
+              <ul>
+                {p.requirements.map((r, i) => (
+                  <li key={i}>{r}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="section">
+              <h3>3. 軟體架構</h3>
+              <p>{p.architecture}</p>
+            </div>
+
+            <div className="section">
+              <h3>4. 資料庫綱要</h3>
+              <p>{p.dbOutline}</p>
+            </div>
+
+            <div className="section">
+              <h3>5. API 規格書</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>方法</th>
+                    <th>路徑</th>
+                    <th>說明</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {p.apiSpec.map((api, i) => (
+                    <tr key={i}>
+                      <td>{api.method}</td>
+                      <td>{api.path}</td>
+                      <td>{api.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      }
+
+      function App() {
+        const [route, setRoute] = useState(window.location.hash || "#/");
+        useEffect(() => {
+          const onHash = () => setRoute(window.location.hash || "#/");
+          window.addEventListener("hashchange", onHash);
+          return () => window.removeEventListener("hashchange", onHash);
+        }, []);
+
+        const navigateTo = (id) => {
+          window.location.hash = `#/project/${id}`;
+        };
+
+        // simple router
+        if (route.startsWith("#/project/")) {
+          const id = route.replace("#/project/", "");
+          return (
+            <div className="container">
+              <Header />
+              <ProjectDetail id={id} />
+            </div>
+          );
+        }
+
+        return (
+          <div className="container">
+            <Header />
+            <main>
+              <h2 style={{ marginTop: 0 }}>作品集</h2>
+              <Projects onOpen={navigateTo} />
+            </main>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
